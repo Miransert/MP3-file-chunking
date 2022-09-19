@@ -1,15 +1,3 @@
-stages:
-    - lint
-    - build
-    - test
-    - deploy
-
-include:
-    - project: 'semester-project-e2020/team-12-continuous-integration/resources'
-      ref: master
-      file: 'production.yml'
-# Set [GROUPNUMBER] to you team number ex. '[GROUPNUMBER].yml' becomes '5.yml'
-
 compile:
     stage: build
     image: docker:latest
