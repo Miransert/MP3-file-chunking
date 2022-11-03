@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "esModuleInterop": true,
+    "types": ["@types/node", "@types/express"],
+    "outDir": "dist"
+  },
+  "include": ["src/**/*"]
+}
