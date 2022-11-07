@@ -1,9 +1,8 @@
 import http from 'http'
 import express from 'express'
-import { Server } from 'socket.io'
+import { Server, Socket } from 'socket.io'
 import fs from 'fs'
 import { GridFSBucket, MongoClient } from 'mongodb'
-import Grid from 'gridfs-stream'
 const app = express()
 const server = http.createServer(app)
 const io = new Server(server)
@@ -23,11 +22,27 @@ client.connect().then((co) => {
   console.error(err)
 })
 
+io.on('connect', (socket: Socket) => {
+  console.log('Client connected to socket')
+  socket.on('disconnect', () => {
+    console.log('Client disconnected from socket')
+  })
+  socket.on('play', () => {
+    bucket.openDownloadStreamByName('all_my_love.mp3').on('data', (chunk) => {
+      console.log(chunk)
+      socket.emit('audio-chunk', chunk)
+    })
+  })
+})
+
 app.get('/play', (req, res) => {
   bucket.openDownloadStreamByName('all_my_love.mp3').pipe(res)
 })
 
-app.listen(802, () => {
+
+
+
+server.listen(802, () => {
   // Song.create({ data: '21312321fsdgdfshgdfs' }).save()
   console.log('Initialized server')
 })
