@@ -1,6 +1,14 @@
-FROM nginx:latest
+FROM node:16.18-slim
 
-EXPOSE 80 443
+RUN mkdir -p /usr/app
+WORKDIR /usr/app
 
-ADD nginx.conf /etc/nginx/conf.d/sp2020.conf
-ADD html/ /usr/share/nginx/html
+COPY package*.json .
+
+RUN yarn install
+
+COPY . .
+
+EXPOSE 802
+
+CMD yarn dev
