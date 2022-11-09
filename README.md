@@ -1,5 +1,18 @@
 # Media Streaming Backend
 
+# Docker
+
+## Building image
+
+```
+docker build -t gitlab.sdu.dk:5050/semester-project-e2022/team-7-media-streaming/media-streaming-backend:latest .
+```
+
+## Pushing image to repo
+
+```
+docker push gitlab.sdu.dk:5050/semester-project-e2022/team-7-media-streaming/media-streaming-backend:latest   
+```
 # Using the streaming service
 
 ## Connecting to the server
