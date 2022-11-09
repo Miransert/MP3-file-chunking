@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv'
+dotenv.config()
 import http from 'http'
 import express from 'express'
 import { Server, Socket } from 'socket.io'
@@ -11,7 +13,7 @@ const io = new Server(server)
 // Creates chunking bucket and establishes connection to the mongo database
 let bucket: GridFSBucket
 
-const mongoURI = 'mongodb://localhost:27017'
+const mongoURI = process.env.DB_URL
 const client = new MongoClient(mongoURI)
 client.connect().then((co) => {
   const db = co.db('songs')
