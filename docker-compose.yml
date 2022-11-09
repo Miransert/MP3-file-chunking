@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+  api:
+    build: .
+    ports:
+      - 802:802
+    networks:
+      - my-network
+  # MongoDB service
+  mongo:
+    image: mongo:latest
+    networks:
+      - my-network
+    # Media Streaming API
+
+networks:
+  my-network:
+    external: false
