@@ -1,4 +1,4 @@
 include:
   - project: 'semester-project-e2022/team-11-continuous-integration/CICD'
     ref: main
-    file: '/team-files/team7.yml'
+    file: '/team-files/Team7/team7.yml'

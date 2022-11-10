@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
     "allowJs": true,
     "esModuleInterop": true,
-    "types": ["@types/node", "@types/express"],
-    "outDir": "dist"
-  },
-  "include": ["src/**/*"]
+    "emitDecoratorMetadata": true,
+    "target": "es6",
+    "moduleResolution": "node"
+  }
 }
