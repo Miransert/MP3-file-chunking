@@ -1,18 +1,35 @@
-version: "3.9"
+version: '3'
 services:
-  api:
-    build: .
-    ports:
-      - 802:802
-    networks:
-      - my-network
   # MongoDB service
   mongo:
     image: mongo:latest
+    hostname: mongo
     networks:
-      - my-network
-    # Media Streaming API
+      - backend
+    container_name: db
+    volumes:
+      - /data/db
+    ports:
+      - 27017:27017
+  api:
+    build: '.'
+    networks:
+      - backend
+    ports:
+      - 802:802
+    depends_on:
+      - mongo
+  mongo-interface:
+    depends_on:
+      - mongo
+    image: mongo-express
+    ports:
+      - '8081:8081'
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+    networks:
+      - backend
 
 networks:
-  my-network:
+  backend:
     external: false
