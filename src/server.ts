@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv'
 dotenv.config()
 import http from 'http'
-import express from 'express'
+import express, { NextFunction } from 'express'
 import { Server, Socket } from 'socket.io'
 import fs from 'fs'
 import { GridFSBucket, MongoClient } from 'mongodb'
@@ -11,12 +11,16 @@ const io = new Server(server)
 import multer from 'multer'
 const upload = multer({ dest: 'test/' })
 import { body, param, validationResult } from 'express-validator'
+import bodyParser from 'body-parser'
+
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
 // Creates chunking bucket and establishes connection to the mongo database
 let bucket: GridFSBucket
 
 const mongoURI = String(process.env.DB_URL)
-console.log(mongoURI)
+console.log('v2')
 const client = new MongoClient(mongoURI)
 client
   .connect()
@@ -55,10 +59,10 @@ io.on('connect', (socket: Socket) => {
 // HTTP streaming implementation. Same principle, except using the pipe function.
 app.get(
   '/songs/:songId',
-  param('songId')
-    .exists()
-    .withMessage('An explicit song identifier is required'),
-  validate,
+  // param('songId')
+  //   .exists()
+  //   .withMessage('An explicit song identifier is required'),
+  // validate,
   async (req: express.Request, res: express.Response) => {
     bucket
       .openDownloadStreamByName(req.params.songId)
@@ -73,23 +77,29 @@ app.get(
 app.post(
   '/songs',
   body('id').exists().withMessage('An explicit song identifier is required'),
-  validate,
+  // validate,
   upload.single('file'),
   (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() })
+    console.log(req.body)
     if (!req.file) return
     fs.createReadStream(req.file.path).pipe(
       bucket.openUploadStream(req.body.id).on('finish', () => {
-        res.sendStatus(202)
+        return res.sendStatus(202)
       })
     )
+    return res.sendStatus(500)
   }
 )
 
 // Validation middleware. Should come after validation definition
-function validate(req: express.Request, res: express.Response) {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) res.status(400).json({ errors: errors.array })
-}
+// function validate(req: express.Request, res: express.Response, next: NextFunction) {
+//   console.log(req)
+
+//   next()
+
+// }
 
 // Opens the socket server and HTTP server for requests
 server.listen(802, () => {

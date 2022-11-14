@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mongo-express-svc
+spec:
+  selector:
+    name: dbui
+  type: ClusterIP
+  ports:
+    - name: dbui-http
+      port: 8081
+      targetPort: 8081
