@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: web-service
+spec:
+  selector:
+    app: backend
+  type: NodePort
+  ports:
+    - name: backend-http
+      port: 802
+      targetPort: 802

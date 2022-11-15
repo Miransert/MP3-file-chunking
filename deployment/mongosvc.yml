@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mongo-svc
+spec:
+  selector:
+    name: db
+  type: ClusterIP
+  ports:
+    - name: mongo-http
+      port: 27017
+      targetPort: 27017

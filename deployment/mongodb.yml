@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+  labels:
+    tier: db
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      name: db
+  template:
+    metadata:
+      labels:
+        name: db
+    spec:
+      containers:
+        - image: mongo:latest
+          name: mongo
+          resources:
+            requests:
+              cpu: "150m"
+              memory: "100Mi"
+            limits:
+              cpu: "300m"
+              memory: "200Mi"
+          ports:
+            - containerPort: 27017
+              name: mongo-http
+          volumeMounts:
+            - mountPath: /data/db
+              name: data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: mongo-stream-pvc
