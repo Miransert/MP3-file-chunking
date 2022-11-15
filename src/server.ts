@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv'
 dotenv.config()
 import http from 'http'
-import express, { NextFunction } from 'express'
+import express from 'express'
 import { Server, Socket } from 'socket.io'
 import fs from 'fs'
 import { GridFSBucket, MongoClient } from 'mongodb'
@@ -10,7 +10,7 @@ const server = http.createServer(app)
 const io = new Server(server)
 import multer from 'multer'
 const upload = multer({ dest: 'test/' })
-import { body, param, validationResult } from 'express-validator'
+import { body, validationResult } from 'express-validator'
 import bodyParser from 'body-parser'
 
 app.use(bodyParser.urlencoded({ extended: true }))
