@@ -21,4 +21,3 @@ export function createSong(req: Request, res: Response) {
     )
     return res.sendStatus(500)
 }
-
