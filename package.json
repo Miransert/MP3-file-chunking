@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "test": "mocha --config tests/runners/mocha/.mocharc.jsonc -r tsconfig-paths/register"
+    "test": "mocha --config tests/runners/mocha/.mocharc.jsonc -r tsconfig-paths/register",
+    "lint": "eslint . --ext .ts"
   },
   "dependencies": {
     "body-parser": "^1.20.1",
@@ -31,6 +32,9 @@
     "@types/gridfs-stream": "^0.5.36",
     "@types/multer": "^1.4.7",
     "@types/node": "^18.11.9",
+    "@typescript-eslint/eslint-plugin": "^5.43.0",
+    "@typescript-eslint/parser": "^5.43.0",
+    "eslint": "^8.27.0",
     "mocha": "^10.1.0",
     "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.1.0"
