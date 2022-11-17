@@ -1,3 +1,7 @@
+import logger from './logger'
+
+logger.info('Starting streaming backend')
+
 import * as dotenv from 'dotenv'
 dotenv.config()
 import http from 'http'
@@ -20,12 +24,11 @@ app.use(bodyParser.json())
 let bucket: GridFSBucket
 
 const mongoURI = String(process.env.DB_URL)
-console.log('v2')
 const client = new MongoClient(mongoURI)
 client
   .connect()
   .then((co) => {
-    console.log('Successfully connected to MongoDB')
+    logger.info('Successfully connected to MongoDB')
     const db = co.db('songs')
     bucket = new GridFSBucket(db, { bucketName: 'songs' })
     // Immediately uploads the song all_my_love.mp3 to the database with the name all_my_love.mp3 with chunks of 10000 bits.
@@ -33,24 +36,24 @@ client
     // Maybe set name to be equal to id?
   })
   .catch((err) => {
-    console.error(err)
+    logger.error(err.toString())
   })
 
 // Socket.IO streaming implementation
 // Client connected to socket server
 io.on('connect', (socket: Socket) => {
-  console.log('Client connected to socket')
+  logger.info('Client connected to socket')
 
   // Client disconnected from socket server
   socket.on('disconnect', () => {
-    console.log('Client disconnected from socket')
+    logger.info('Client disconnected from socket')
   })
 
   // Client sent event with type play and thus, we begin streaming song from database and "emitting" or sending it in chunks of data.
   // Song can be found by specific name or id
   socket.on('play', () => {
     bucket.openDownloadStreamByName('all_my_love.mp3').on('data', (chunk) => {
-      console.log(chunk)
+      logger.info(chunk)
       socket.emit('audio-chunk', chunk)
     })
   })
@@ -73,7 +76,7 @@ app.get(
   }
 )
 
-// Maybe we should just make an endpoint here that mediq acquisition calls
+// Maybe we should just make an endpoint here that media acquisition calls
 app.post(
   '/songs',
   body('id').exists().withMessage('An explicit song identifier is required'),
@@ -81,7 +84,8 @@ app.post(
   upload.single('file'),
   (req, res) => {
     const errors = validationResult(req)
-    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() })
+    if (!errors.isEmpty())
+      return res.status(400).json({ errors: errors.array() })
     console.log(req.body)
     if (!req.file) return
     fs.createReadStream(req.file.path).pipe(
@@ -103,5 +107,8 @@ app.post(
 
 // Opens the socket server and HTTP server for requests
 server.listen(802, () => {
-  console.log('Initialized server')
+  logger.info('Initialized server')
+  logger.silly(
+    'Keep in mind that the above message \ndosent mean that the database connection has been established'
+  )
 })
