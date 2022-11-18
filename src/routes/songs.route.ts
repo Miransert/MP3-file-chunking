@@ -6,7 +6,7 @@ const upload = multer({ dest: 'test/' })
 
 const router = express.Router()
 
-router.get('/:songID', songsController.getSongByID)
+router.get('/:songId', songsController.getSongByID)
 
 router.post('/', upload.single('file'), songsController.createSong)
 

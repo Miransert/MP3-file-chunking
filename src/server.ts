@@ -27,9 +27,8 @@ io.on('connect', (socket: Socket) => {
 
   // Client sent event with type play and thus, we begin streaming song from database and "emitting" or sending it in chunks of data.
   // Song can be found by specific name or id
-  socket.on('play', () => {
-    bucket.openDownloadStreamByName('all_my_love.mp3').on('data', (chunk) => {
-      console.log(chunk)
+  socket.on('play', (data) => {
+    bucket.openDownloadStreamByName(data.id).on('data', (chunk) => {
       socket.emit('audio-chunk', chunk)
     })
   })

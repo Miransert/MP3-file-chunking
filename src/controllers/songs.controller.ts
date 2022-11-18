@@ -13,11 +13,11 @@ export function getSongByID(req: Request, res: Response) {
 }
 
 export function createSong(req: Request, res: Response) {
+    console.log(req.file)
     if (!req.file) return
     fs.createReadStream(req.file.path).pipe(
         bucket.openUploadStream(req.body.id).on('finish', () => {
-            return res.sendStatus(202)
+            res.sendStatus(202)
         })
     )
-    return res.sendStatus(500)
 }
