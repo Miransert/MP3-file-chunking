@@ -5,23 +5,14 @@ import path from 'path'
 import winston from 'winston'
 
 const day = new Date()
-const filename = path.join(
-  __dirname,
-  '/logs/backend-streaming-[' +
-    day.getDate() +
-    '-' +
-    day.getMonth() +
-    '-' +
-    day.getFullYear() +
-    '].log'
-)
+const filename = generateNewLogPath()
 
 //
 // Remove the file, ignoring any errors
 //
-try {
-  fs.unlinkSync(filename)
-} catch (ex) {}
+// try {
+//   fs.unlinkSync(filename)
+// } catch (ex) {}
 
 const config = {
   levels: {
@@ -56,11 +47,7 @@ const logger = winston.createLogger({
     }),
 
     winston.format.printf(
-      (info) =>
-        `[${info.timestamp}] [${info.lable}] [${info.level.toUpperCase()}]: ${
-          info.message
-        }`
-    )
+      (info) => `[${info.timestamp}] [Streaming Backend] [${info.level.toUpperCase()}]: ${info.message}`)
   ),
   transports: [new winston.transports.File({ filename })],
 })
@@ -68,6 +55,7 @@ const logger = winston.createLogger({
 if (process.env.NODE_ENV !== 'production') {
   logger.add(
     new winston.transports.Console({
+      level: 'silly',
       format: winston.format.combine(
         winston.format.label({ label: '[Streaming Backend]' }),
         winston.format.timestamp({
@@ -77,9 +65,7 @@ if (process.env.NODE_ENV !== 'production') {
         winston.format.printf((info) =>
           colorize.colorize(
             info.level,
-            `[${info.timestamp}] [${
-              info.lable
-            }] [${info.level.toUpperCase()}]: ${info.message}`
+            `[${info.timestamp}] [Streaming Backend] [${info.level.toUpperCase()}]: ${info.message}`
           )
         )
       ),
@@ -88,3 +74,27 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export default logger
+
+
+function generateNewLogPath() {
+  var logPath = generateLogPath('')
+  var logNumber = 0
+  while(fs.existsSync(logPath)){
+    logNumber++;
+    logPath = generateLogPath('_' + String(logNumber))
+  }
+  return logPath;
+}
+
+function generateLogPath(logNumber:String){
+  return path.join(
+    __dirname,
+    '/logs/backend_streaming_[' +
+    day.getDate() +
+    '-' +
+    day.getMonth() +
+    '-' +
+    day.getFullYear() +
+    ']' + logNumber + '.log'
+  );
+}
