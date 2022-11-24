@@ -1,3 +1,7 @@
+import logger from './logger'
+
+logger.info('Starting streaming backend')
+
 import * as dotenv from 'dotenv'
 dotenv.config()
 import http from 'http'
@@ -18,17 +22,18 @@ app.use('/songs', songsRouter)
 // Socket.IO streaming implementation
 // Client connected to socket server
 io.on('connect', (socket: Socket) => {
-  console.log('Client connected to socket')
+  logger.info('Client connected to socket')
 
   // Client disconnected from socket server
   socket.on('disconnect', () => {
-    console.log('Client disconnected from socket')
+    logger.info('Client disconnected from socket')
   })
 
   // Client sent event with type play and thus, we begin streaming song from database and "emitting" or sending it in chunks of data.
   // Song can be found by specific name or id
   socket.on('play', (data) => {
     bucket.openDownloadStreamByName(data.id).on('data', (chunk) => {
+      logger.info(chunk)
       socket.emit('audio-chunk', chunk)
     })
   })
@@ -36,5 +41,8 @@ io.on('connect', (socket: Socket) => {
 
 // Opens the socket server and HTTP server for requests
 server.listen(802, () => {
-  console.log('Initialized server')
+  logger.info('Initialized server')
+  logger.silly(
+    'Keep in mind that the above message \ndosent mean that the database connection has been established'
+  )
 })
