@@ -1,3 +1,2 @@
-[2022-11-24 12:41:00] [undefined] [INFO]: Starting streaming backend
-[2022-11-24 12:41:01] [undefined] [INFO]: Initialized server
-[2022-11-24 12:41:01] [undefined] [INFO]: Successfully connected to MongoDB
+[32m[2022-11-24 13:56:46] [Streaming Backend] [INFO]: Starting streaming backend[39m
+[32m[2022-11-24 13:56:47] [Streaming Backend] [INFO]: Initialized server[39m
