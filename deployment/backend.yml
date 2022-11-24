@@ -24,6 +24,9 @@ spec:
             limits:
               cpu: "300m"
               memory: "200Mi"
+          env:
+            - name: DB_URL
+              value: mongodb://mongo-svc:27017
           ports:
             - containerPort: 802
               name: backend-http
