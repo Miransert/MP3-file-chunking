@@ -2,17 +2,8 @@
 
 import fs from 'fs'
 import path from 'path'
+import internal from 'stream'
 import winston from 'winston'
-
-const day = new Date()
-const filename = generateNewLogPath()
-
-//
-// Remove the file, ignoring any errors
-//
-// try {
-//   fs.unlinkSync(filename)
-// } catch (ex) {}
 
 const config = {
   levels: {
@@ -38,63 +29,66 @@ winston.addColors(config.colors)
 const colorize = winston.format.colorize()
 
 const logger = winston.createLogger({
-  level: 'info',
   levels: config.levels,
-  format: winston.format.combine(
-    winston.format.label({ label: 'Streaming Backend' }),
-    winston.format.timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss',
-    }),
-
-    winston.format.printf(
-      (info) => `[${info.timestamp}] [Streaming Backend] [${info.level.toUpperCase()}]: ${info.message}`)
-  ),
-  transports: [new winston.transports.File({ filename })],
-})
-
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(
-    new winston.transports.Console({
-      level: 'silly',
+  
+  transports: [
+    new winston.transports.File({ 
+      filename: generateNewLogPath(),
+      level: 'info',
       format: winston.format.combine(
-        winston.format.label({ label: '[Streaming Backend]' }),
-        winston.format.timestamp({
-          format: 'YYYY-MM-DD HH:mm:ss',
-        }),
-
-        winston.format.printf((info) =>
-          colorize.colorize(
-            info.level,
-            `[${info.timestamp}] [Streaming Backend] [${info.level.toUpperCase()}]: ${info.message}`
-          )
-        )
+        winston.format.label({ label: 'Streaming Backend' }),
+        winston.format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
+        winston.format.printf(
+          (info) => generatePrintingFormat(info))
+          //(info) => `[${info.timestamp}] [Streaming Backend] [${info.level.toUpperCase()}]: ${info.message}`)
       ),
-    })
-  )
-}
+  }),
+  new winston.transports.Console({
+    level: (process.env.NODE_ENV === 'production') ? 'info': 'silly',
+    format: winston.format.combine(
+      winston.format.label({ label: '[Streaming Backend]'}),
+      winston.format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
+      winston.format.printf((info) => generateColoredPrintingFormat(info)
+      )
+    ),
+  })
+],
+})
 
 export default logger
 
 
+function generateColoredPrintingFormat(info: winston.Logform.TransformableInfo): string {
+  return colorize.colorize(
+    info.level, generatePrintingFormat(info)
+  )
+}
+
+function generatePrintingFormat(info: winston.Logform.TransformableInfo): string {
+  return `[${info.timestamp}] [Streaming Backend] [${info.level.toUpperCase()}]: ${info.message}`
+}
+
 function generateNewLogPath() {
-  let logPath = generateLogPath('')
   let logNumber = 0
-  while (fs.existsSync(logPath)) {
+  let logPath;
+  do{
+    logPath = generateLogPath(logNumber);
     logNumber++;
-    logPath = generateLogPath('_' + String(logNumber))
-  }
+  } while (fs.existsSync(logPath))
+
   return logPath;
 }
 
-function generateLogPath(logNumber: string) {
+function generateLogPath(logNumber: number) {
+const day = new Date()
   return path.join(
     __dirname,
-    '/logs/backend_streaming_[' +
+    '/logs/Backend_Streaming_[' +
     day.getDate() +
     '-' +
     day.getMonth() +
     '-' +
     day.getFullYear() +
-    ']' + logNumber + '.log'
+    ']' + ((logNumber==0) ? "": "_" + logNumber) + '.log'
   );
 }
