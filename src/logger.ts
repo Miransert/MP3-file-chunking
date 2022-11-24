@@ -77,16 +77,16 @@ export default logger
 
 
 function generateNewLogPath() {
-  var logPath = generateLogPath('')
-  var logNumber = 0
-  while(fs.existsSync(logPath)){
+  let logPath = generateLogPath('')
+  let logNumber = 0
+  while (fs.existsSync(logPath)) {
     logNumber++;
     logPath = generateLogPath('_' + String(logNumber))
   }
   return logPath;
 }
 
-function generateLogPath(logNumber:String){
+function generateLogPath(logNumber: string) {
   return path.join(
     __dirname,
     '/logs/backend_streaming_[' +
