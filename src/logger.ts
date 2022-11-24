@@ -2,7 +2,6 @@
 
 import fs from 'fs'
 import path from 'path'
-import internal from 'stream'
 import winston from 'winston'
 
 const config = {
@@ -38,19 +37,16 @@ const logger = winston.createLogger({
       format: winston.format.combine(
         winston.format.label({ label: 'Streaming Backend' }),
         winston.format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
-        winston.format.printf(
-          (info) => generatePrintingFormat(info))
-          //(info) => `[${info.timestamp}] [Streaming Backend] [${info.level.toUpperCase()}]: ${info.message}`)
-      ),
+        winston.format.printf((info) => generatePrintingFormat(info))
+      )
   }),
   new winston.transports.Console({
     level: (process.env.NODE_ENV === 'production') ? 'info': 'silly',
     format: winston.format.combine(
       winston.format.label({ label: '[Streaming Backend]'}),
       winston.format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
-      winston.format.printf((info) => generateColoredPrintingFormat(info)
-      )
-    ),
+      winston.format.printf((info) => generateColoredPrintingFormat(info))
+    )
   })
 ],
 })
@@ -59,9 +55,7 @@ export default logger
 
 
 function generateColoredPrintingFormat(info: winston.Logform.TransformableInfo): string {
-  return colorize.colorize(
-    info.level, generatePrintingFormat(info)
-  )
+  return colorize.colorize(info.level, generatePrintingFormat(info))
 }
 
 function generatePrintingFormat(info: winston.Logform.TransformableInfo): string {
