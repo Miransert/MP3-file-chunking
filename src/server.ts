@@ -14,13 +14,27 @@ import bodyParser from 'body-parser'
 import songsRouter from './routes/songs.route'
 import { bucket } from './database'
 import helmet from 'helmet'
-import cors from 'cors'
+// import cors from 'cors'
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 app.use(helmet())
-app.use(cors({ origin: '*' }))
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Credentials', 'true')
+  res.header('Access-Control-Allow-Origin', req.headers.origin)
+  res.header('Cross-Origin-Resource-Policy', 'cross-origin')
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,PATCH,DELETE')
+  res.header(
+    'Access-Control-Allow-Headers',
+    'X-Requested-With, X-HTTP-Method-Override, Key, Content-Type, Accept, authorization'
+  )
+  if ('OPTIONS' == req.method) {
+    res.sendStatus(200)
+  } else {
+    next()
+  }
+})
 app.use('/songs', songsRouter)
 
 // Socket.IO streaming implementation
