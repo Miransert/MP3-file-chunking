@@ -16,14 +16,14 @@ spec:
     spec:
       containers:
         - name: backend
-          image: gitlab.sdu.dk:5050/semester-project-e2022/team-7-media-streaming/media-streaming-backend:1.0.4
+          image: gitlab.sdu.dk:5050/semester-project-e2022/team-7-media-streaming/media-streaming-backend:1.0.5
           resources:
             requests:
-              cpu: "150m"
-              memory: "100Mi"
+              cpu: '150m'
+              memory: '100Mi'
             limits:
-              cpu: "300m"
-              memory: "200Mi"
+              cpu: '300m'
+              memory: '200Mi'
           env:
             - name: DB_URL
               value: mongodb://mongo-svc:27017
