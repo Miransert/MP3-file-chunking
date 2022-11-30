@@ -3,7 +3,7 @@ FROM node:16.18
 RUN mkdir -p /usr/app
 WORKDIR /usr/app
 
-COPY package*.json .
+COPY package*.json ./
 
 
 RUN yarn install
