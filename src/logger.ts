@@ -3,33 +3,13 @@
 import fs from 'fs'
 import path from 'path'
 import winston from 'winston'
-
-const config = {
-  levels: {
-    error: 0,
-    warn: 1,
-    info: 2,
-    verbose: 3,
-    debug: 4,
-    silly: 5,
-  },
-  colors: {
-    error: 'red',
-    warn: 'yellow',
-    info: 'green',
-    verbose: 'grey',
-    debug: 'blue',
-    silly: 'magenta',
-  },
-}
-
+console.log(typeof path.join(__dirname, '..', 'loggerConfig.json'))
+console.log(typeof './loggerConfig.json')
+import {default as config} from './loggerConfig.json';
 winston.addColors(config.colors)
-
-const colorize = winston.format.colorize()
 
 const logger = winston.createLogger({
   levels: config.levels,
-  
   transports: [
     new winston.transports.File({ 
       filename: generateNewLogPath(),
@@ -43,7 +23,7 @@ const logger = winston.createLogger({
   new winston.transports.Console({
     level: (process.env.NODE_ENV === 'production') ? 'info': 'silly',
     format: winston.format.combine(
-      winston.format.label({ label: '[Streaming Backend]'}),
+      winston.format.label({ label: 'Streaming Backend'}),
       winston.format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
       winston.format.printf((info) => generateColoredPrintingFormat(info))
     )
@@ -55,11 +35,11 @@ export default logger
 
 
 function generateColoredPrintingFormat(info: winston.Logform.TransformableInfo): string {
-  return colorize.colorize(info.level, generatePrintingFormat(info))
+  return winston.format.colorize().colorize(info.level, generatePrintingFormat(info))
 }
 
 function generatePrintingFormat(info: winston.Logform.TransformableInfo): string {
-  return `[${info.timestamp}] [Streaming Backend] [${info.level.toUpperCase()}]: ${info.message}`
+  return `[${info.timestamp}] [${info.label}] [${info.level.toUpperCase()}]: ${info.message}`
 }
 
 function generateNewLogPath() {
