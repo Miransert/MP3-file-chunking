@@ -3,9 +3,26 @@
 import fs from 'fs'
 import path from 'path'
 import winston from 'winston'
-console.log(typeof path.join(__dirname, '..', 'loggerConfig.json'))
-console.log(typeof './loggerConfig.json')
-import {default as config} from './loggerConfig.json';
+
+const config ={
+  "levels": {
+      "error": 0,
+      "warn": 1,
+      "info": 2,
+      "verbose": 3,
+      "debug": 4,
+      "silly": 5
+  },
+  "colors": {
+      "error": "red",
+      "warn": "yellow",
+      "info": "green",
+      "verbose": "grey",
+      "debug": "blue",
+      "silly": "magenta"
+  }
+}
+
 winston.addColors(config.colors)
 
 const logger = winston.createLogger({
