@@ -33,7 +33,7 @@ const logger = winston.createLogger({
       level: 'info',
       format: winston.format.combine(
         winston.format.label({ label: 'Streaming Backend' }),
-        winston.format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
+        winston.format.timestamp({format: 'DD-MM-YYYY HH:mm:ss'}),
         winston.format.printf((info) => generatePrintingFormat(info))
       )
   }),
