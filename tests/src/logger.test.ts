@@ -5,6 +5,7 @@ import winston from 'winston'
 import path from 'path'
 import { unlinkSync, readFileSync } from 'fs'
 import { toUnicode } from 'punycode'
+import { Console } from 'console'
 
 describe("File transport testing", () => {
     const foundfileTransport = logger.transports.find((transport) => { return transport instanceof winston.transports.File })
@@ -30,15 +31,11 @@ describe("File transport testing", () => {
 
     it("should write log correctly", () => {
         logger.info("Test")
-        const logFile = readFileSync(fileTransport.dirname + '\\' + fileTransport.filename, 'utf-8');
+        const logFile = readFileSync(fileTransport.dirname + '/' + fileTransport.filename, 'utf-8');
         const date = new Date()
         const formattedDateString = '[' +
-            date.getFullYear() + '-' +
-            (date.getMonth() + 1) + '-' +
-            date.getDate() + ' ' +
-            date.getHours() + ':' +
-            date.getUTCMinutes() + ':' +
-            date.getSeconds() + ']'
+            date.toLocaleDateString("dk-DK").replace('.', '-').replace('.', '-') + ' ' +
+            date.toLocaleTimeString("en-GB") + ']'
         expect(logFile.trim()).to.be.equal(formattedDateString + " [Streaming Backend] [INFO]: Test")
     })
 })
