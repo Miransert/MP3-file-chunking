@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: gitlab.sdu.dk:5050/semester-project-e2022/team-7-media-streaming/media-streaming-backend:1.0.5
+          image: gitlab.sdu.dk:5050/semester-project-e2022/team-7-media-streaming/media-streaming-backend:latest
           resources:
             requests:
               cpu: '150m'
