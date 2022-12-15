@@ -1,7 +1,6 @@
 import * as dotenv from 'dotenv'
 dotenv.config()
 import { GridFSBucket, MongoClient } from 'mongodb'
-import Grid from 'gridfs-stream'
 
 // Creates chunking bucket and establishes connection to the mongo database
 export let bucket: GridFSBucket

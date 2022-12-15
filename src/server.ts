@@ -14,7 +14,6 @@ import bodyParser from 'body-parser'
 import songsRouter from './routes/songs.route'
 import { bucket } from './database'
 import helmet from 'helmet'
-// import cors from 'cors'
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
