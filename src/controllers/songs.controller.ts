@@ -43,9 +43,14 @@ export async function getSongByID(req: Request, res: Response) {
     .pipe(res)
 }
 
-export function createSong(req: Request, res: Response) {
+export async function createSong(req: Request, res: Response) {
   console.log(req.file)
   if (!req.file) return
+
+  const foundFiles = await bucket.find({ filename: req.body.id }).toArray()
+  // Delete file if it already exists before uploading new one
+  console.log(await bucket.find({}).toArray())
+  if (foundFiles.length) bucket.delete(foundFiles[0]._id)
 
   fs.createReadStream(req.file.path).pipe(
     bucket.openUploadStream(req.body.id).on('finish', () => {
