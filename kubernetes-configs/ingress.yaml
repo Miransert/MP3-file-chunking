@@ -15,7 +15,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: media-streaming-deployment 
+                name: backend
                 port:
                   number: 802
 
