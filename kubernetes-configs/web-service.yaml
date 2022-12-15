@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service # <-- DO NOT CHANGE (the ingress uses this to direct trafic to this service)
+  namespace: team01 # <-- NAMESPACE YOU HAVE ACCESS TO (teamname, teamname-staging, teamname-prod)
+spec:
+  ports:
+  - port: 80 # <-- DO NOT CHANGE
+    protocol: TCP
+    targetPort: 802 # <- PORT OF CONTAINER TO HIT
+  selector:
+    app: backend # <-- labels.app ON THE CONTAINER TO HIT
+  type: ClusterIP
