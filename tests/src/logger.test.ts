@@ -34,9 +34,8 @@ describe("File transport testing", () => {
         const logFile = readFileSync(fileTransport.dirname + '/' + fileTransport.filename, 'utf-8');
         const date = new Date()
         const formattedDateString = '[' +
-        date.toLocaleDateString("dk-DK").replace('.', '-').replace('.', '-') + ' ' +
+            date.toLocaleDateString("dk-DK").replace('.', '-').replace('.', '-') + ' ' +
             date.toLocaleTimeString("en-GB") + ']'
-        console.log(formattedDateString)
         expect(logFile.trim()).to.be.equal(formattedDateString + " [Streaming Backend] [INFO]: Test")
     })
 })

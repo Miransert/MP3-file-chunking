@@ -41,7 +41,7 @@ const logger = winston.createLogger({
     level: (process.env.NODE_ENV === 'production') ? 'info': 'silly',
     format: winston.format.combine(
       winston.format.label({ label: 'Streaming Backend'}),
-      winston.format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
+      winston.format.timestamp({format: 'DD-MM-YYYY HH:mm:ss'}),
       winston.format.printf((info) => generateColoredPrintingFormat(info))
     )
   })
