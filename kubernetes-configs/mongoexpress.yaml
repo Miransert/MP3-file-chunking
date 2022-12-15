@@ -3,25 +3,25 @@ kind: Deployment
 metadata:
   name: mongo-express
 spec:
+  replicas: 2
   selector:
     matchLabels:
       name: dbui
-  replicas: 2
   template:
     metadata:
       labels:
         name: dbui
     spec:
       containers:
-        - name: mongo-express
-          image: mongo-express:latest
-          env:
-            - name: ME_CONFIG_MONGODB_SERVER
-              value: mongo-svc
-          ports:
-            - containerPort: 8081
-              name: dbui-http
-          resources:
-            limits:
-              cpu: "50m"
-              memory: "50Mi"
+      - env:
+        - name: ME_CONFIG_MONGODB_SERVER
+          value: mongo-svc
+        image: mongo-express:latest
+        name: mongo-express
+        ports:
+        - containerPort: 8081
+          name: dbui-http
+        resources:
+          limits:
+            cpu: 50m
+            memory: 50Mi

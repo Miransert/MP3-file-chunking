@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: backend
 spec:
+  replicas: 2
   selector:
     matchLabels:
-      name: backend
       app: backend
-  replicas: 2
+      name: backend
   template:
     metadata:
       labels:
-        name: backend
         app: backend
+        name: backend
     spec:
       containers:
         - name: backend
@@ -31,4 +31,4 @@ spec:
             - containerPort: 802
               name: backend-http
       imagePullSecrets:
-        - name: sdugitlab
+      - name: sdugitlab
