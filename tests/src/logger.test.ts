@@ -36,9 +36,9 @@ describe("File transport testing", () => {
             date.getFullYear() + '-' +
             (date.getMonth() + 1) + '-' +
             date.getDate() + ' ' +
-            date.getHours() + ':' +
+            date.getUTCHours() + ':' +
             date.getUTCMinutes() + ':' +
-            date.getSeconds() + ']'
+            date.getUTCSeconds() + ']'
         expect(logFile.trim()).to.be.equal(formattedDateString + " [Streaming Backend] [INFO]: Test")
     })
 })
