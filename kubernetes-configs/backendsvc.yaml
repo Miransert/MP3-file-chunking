@@ -8,5 +8,5 @@ spec:
   type: NodePort
   ports:
     - name: backend-http
-      port: 802
+      port: 80
       targetPort: 802
