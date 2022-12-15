@@ -3,32 +3,32 @@ kind: Deployment
 metadata:
   name: backend
 spec:
+  replicas: 2
   selector:
     matchLabels:
-      name: backend
       app: backend
-  replicas: 2
+      name: backend
   template:
     metadata:
       labels:
-        name: backend
         app: backend
+        name: backend
     spec:
       containers:
-        - name: backend
-          image: gitlab.sdu.dk:5050/semester-project-e2022/team-7-media-streaming/media-streaming-backend:1.0.5
-          resources:
-            requests:
-              cpu: '150m'
-              memory: '100Mi'
-            limits:
-              cpu: '300m'
-              memory: '200Mi'
-          env:
-            - name: DB_URL
-              value: mongodb://mongo-svc:27017
-          ports:
-            - containerPort: 802
-              name: backend-http
+      - env:
+        - name: DB_URL
+          value: mongodb://mongo-svc:27017
+        image: gitlab.sdu.dk:5050/semester-project-e2022/team-7-media-streaming/media-streaming-backend:1.0.8
+        name: backend
+        ports:
+        - containerPort: 802
+          name: backend-http
+        resources:
+          limits:
+            cpu: 300m
+            memory: 200Mi
+          requests:
+            cpu: 150m
+            memory: 100Mi
       imagePullSecrets:
-        - name: sdugitlab
+      - name: sdugitlab
