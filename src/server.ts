@@ -14,7 +14,6 @@ import bodyParser from 'body-parser'
 import songsRouter from './routes/songs.route'
 import { bucket } from './database'
 import helmet from 'helmet'
-// import cors from 'cors'
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -50,7 +49,8 @@ io.on('connect', (socket: Socket) => {
   // Client sent event with type play and thus, we begin streaming song from database and "emitting" or sending it in chunks of data.
   // Song can be found by specific name or id
   socket.on('play', (data) => {
-    bucket.openDownloadStreamByName(data.id).on('data', (chunk) => {
+    const { id, start, end } = data
+    bucket.openDownloadStreamByName(id, { start, end }).on('data', (chunk) => {
       logger.info(chunk)
       socket.emit('audio-chunk', chunk)
     })
