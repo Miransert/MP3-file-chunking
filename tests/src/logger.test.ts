@@ -46,7 +46,7 @@ describe("File transport testing", () => {
 describe("File transport testing", () => {
     const foundConsoleTransport = logger.transports.find((transport) => { return transport instanceof winston.transports.Console })
 
-    it('should contain a transport of the type File', () => {
+    it('should contain a transport of the type Console', () => {
         expect(foundConsoleTransport).to.not.be.undefined;
     })
     if (foundConsoleTransport == undefined || !(foundConsoleTransport instanceof winston.transports.Console)) {
