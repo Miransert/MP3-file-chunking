@@ -30,7 +30,7 @@ describe("File transport testing", () => {
 
     it("should write log correctly", () => {
         logger.info("Test")
-        const logFile = readFileSync(fileTransport.dirname + '\\' + fileTransport.filename, 'utf-8');
+        const logFile = readFileSync(fileTransport.dirname + '/' + fileTransport.filename, 'utf-8');
         const date = new Date()
         const formattedDateString = '[' +
             date.getFullYear() + '-' +
