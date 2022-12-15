@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: web-service # <-- DO NOT CHANGE (the ingress uses this to direct trafic to this service)
-  namespace: team01 # <-- NAMESPACE YOU HAVE ACCESS TO (teamname, teamname-staging, teamname-prod)
+  namespace: team07-prod # <-- NAMESPACE YOU HAVE ACCESS TO (teamname, teamname-staging, teamname-prod)
 spec:
   ports:
   - port: 80 # <-- DO NOT CHANGE
