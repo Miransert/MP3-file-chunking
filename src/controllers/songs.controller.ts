@@ -4,6 +4,8 @@ import fs from 'fs'
 
 export async function getSongByID(req: Request, res: Response) {
   const file = (await bucket.find({ filename: req.params.songId }).toArray())[0]
+  if (!file) return res.sendStatus(404)
+  console.log(file)
   if (req.headers['range']) {
     const parts = req.headers['range'].replace(/bytes=/, '').split('-')
     const partialstart = parts[0]
@@ -35,12 +37,6 @@ export async function getSongByID(req: Request, res: Response) {
       })
       .pipe(res)
   }
-  bucket
-    .openDownloadStreamByName(req.params.songId)
-    .on('error', () => {
-      res.sendStatus(400)
-    })
-    .pipe(res)
 }
 
 export async function createSong(req: Request, res: Response) {
