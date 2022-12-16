@@ -9,7 +9,7 @@ export default async function validateUser(
   res: Response,
   next: NextFunction
 ) {
-  if (enabled) return next()
+  if (!enabled) return next()
   const url = 'http://lamini5.uvm.sdu.dk:30080/api/user?id=' + req.headers.id
 
   const result = await axios.get(url).catch((err: AxiosError) => {
