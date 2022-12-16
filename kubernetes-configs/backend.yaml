@@ -18,7 +18,7 @@ spec:
       - env:
         - name: DB_URL
           value: mongodb://mongo-svc:27017
-        image: gitlab.sdu.dk:5050/semester-project-e2022/team-7-media-streaming/media-streaming-backend:1.0.16
+        image: gitlab.sdu.dk:5050/semester-project-e2022/team-7-media-streaming/media-streaming-backend:1.0.17
         name: backend
         ports:
         - containerPort: 802
