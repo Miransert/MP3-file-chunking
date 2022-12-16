@@ -18,6 +18,7 @@ export async function getSongByID(req: Request, res: Response) {
     res.set({
       'Accept-Ranges': 'bytes',
       'Content-Length': chunksize,
+      'Transfer-Encoding': 'chunked',
       'Content-Range': 'bytes ' + start + '-' + end + '/' + file.length,
       'Content-Type': 'audio/mpeg',
     })
@@ -40,7 +41,6 @@ export async function getSongByID(req: Request, res: Response) {
 }
 
 export async function createSong(req: Request, res: Response) {
-  console.log(req.file)
   if (!req.file) return
 
   const foundFiles = await bucket.find({ filename: req.body.id }).toArray()
