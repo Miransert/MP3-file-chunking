@@ -5,7 +5,7 @@ logger.info('Starting streaming backend')
 import * as dotenv from 'dotenv'
 dotenv.config()
 import http from 'http'
-import express from 'express'
+import express, { Request, Response } from 'express'
 import { Server, Socket } from 'socket.io'
 const app = express()
 const server = http.createServer(app)
@@ -35,6 +35,9 @@ app.use(function (req, res, next) {
   }
 })
 app.use('/songs', songsRouter)
+app.get('/ping', (req: Request, res: Response) => {
+  res.status(200).send('pong')
+})
 
 // Socket.IO streaming implementation
 // Client connected to socket server
