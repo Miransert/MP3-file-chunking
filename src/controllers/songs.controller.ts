@@ -13,7 +13,7 @@ export async function getSongByID(req: Request, res: Response) {
     const end = partialend ? parseInt(partialend, 10) : file.length - 1
     const chunksize = end - start + 1
 
-    res.writeHead(206, {
+    res.set({
       'Accept-Ranges': 'bytes',
       'Content-Length': chunksize,
       'Content-Range': 'bytes ' + start + '-' + end + '/' + file.length,
