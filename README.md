@@ -29,7 +29,7 @@ Possible return values:
 
 `POST /songs`
 
-Creates a song file in the database and prepares it in chunks for streaming.
+Creates a song file in the database and prepares it in chunks for streaming. If a song with the same id already exists, the song will be replaced.
 
 **Required encoding:**
 multipart/formdata
