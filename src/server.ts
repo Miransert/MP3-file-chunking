@@ -15,8 +15,8 @@ import songsRouter from './routes/songs.route'
 import { bucket } from './database'
 import helmet from 'helmet'
 
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }))
+app.use(bodyParser.json({ limit: '50mb' }))
 
 app.use(helmet())
 app.use(function (req, res, next) {
@@ -39,18 +39,13 @@ app.get('/ping', (req: Request, res: Response) => {
   res.status(200).send('pong')
 })
 
-// Socket.IO streaming implementation
-// Client connected to socket server
 io.on('connect', (socket: Socket) => {
   logger.info('Client connected to socket')
 
-  // Client disconnected from socket server
   socket.on('disconnect', () => {
     logger.info('Client disconnected from socket')
   })
 
-  // Client sent event with type play and thus, we begin streaming song from database and "emitting" or sending it in chunks of data.
-  // Song can be found by specific name or id
   socket.on('play', (data) => {
     const { id, start, end } = data
     bucket.openDownloadStreamByName(id, { start, end }).on('data', (chunk) => {
